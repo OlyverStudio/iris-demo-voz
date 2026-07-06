@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fale com a Íris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --roxo:#7c3aed; --roxo-claro:#a78bfa; --bg:#0a0a0b;
+    --card:#141417; --card-borda:#26262b; --branco:#f5f5f7;
+    --cinza:#a1a1aa; --verde:#34d399; --vermelho:#f87171;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:'Inter',-apple-system,system-ui,sans-serif;
+    background:var(--bg); color:var(--branco);
+    -webkit-font-smoothing:antialiased;
+    min-height:100dvh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center;
+    padding:28px 22px;
+    background-image:radial-gradient(120% 80% at 50% 0%, rgba(124,58,237,.28), transparent 60%);
+  }
+  .marca{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--roxo-claro);font-weight:600;margin-bottom:26px}
+  h1{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+  h1 span{color:var(--roxo-claro)}
+  .sub{color:var(--cinza);font-size:15px;max-width:360px;margin:0 auto 30px}
+
+  /* ORB */
+  .orb-wrap{position:relative;width:170px;height:170px;margin:6px auto 26px;display:flex;align-items:center;justify-content:center}
+  .orb{
+    width:120px;height:120px;border-radius:50%;
+    background:linear-gradient(145deg,var(--roxo),#5b21b6);
+    display:flex;align-items:center;justify-content:center;font-size:52px;
+    box-shadow:0 14px 50px rgba(124,58,237,.5);
+    transition:transform .2s ease;
+    z-index:2;
+  }
+  .ring{position:absolute;border-radius:50%;border:2px solid rgba(124,58,237,.5);width:120px;height:120px;opacity:0}
+  body.falando .ring{animation:pulse 1.6s ease-out infinite}
+  body.falando .ring:nth-child(2){animation-delay:.5s}
+  body.falando .orb{transform:scale(1.06)}
+  @keyframes pulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.7)}}
+
+  /* STATUS */
+  .status{font-size:14px;color:var(--cinza);min-height:22px;margin-bottom:24px;font-weight:500}
+  .status.on{color:var(--verde)}
+  .status.err{color:var(--vermelho)}
+
+  /* BOTÕES */
+  .btn{
+    border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:17px;
+    padding:16px 40px;border-radius:100px;color:#fff;transition:transform .15s,opacity .15s;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn-falar{background:linear-gradient(145deg,var(--roxo),#6d28d9);box-shadow:0 10px 30px rgba(124,58,237,.45)}
+  .btn-encerrar{background:#27272a;border:1px solid #3f3f46}
+  .btn[disabled]{opacity:.5;cursor:default}
+  .hidden{display:none!important}
+
+  .dica{margin-top:22px;font-size:13px;color:#71717a;max-width:340px}
+  .rodape{position:fixed;bottom:18px;left:0;right:0;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#3f3f46}
+</style>
+</head>
+<body>
+  <div class="marca">JacSecurity · Assistente de IA</div>
+  <h1>Fale com a <span>Íris</span></h1>
+  <p class="sub">Toque no botão, permita o microfone e converse com ela por voz — como se fosse uma ligação de verdade.</p>
+
+  <div class="orb-wrap">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="orb">💙</div>
+  </div>
+
+  <div class="status" id="status">Pronta pra conversar</div>
+
+  <button class="btn btn-falar" id="btnFalar">🎙️ Falar com a Íris</button>
+  <button class="btn btn-encerrar hidden" id="btnEncerrar">Encerrar conversa</button>
+
+  <p class="dica" id="dica">Funciona melhor no Chrome ou Safari, com fone de ouvido.</p>
+
+  <div class="rodape">Olyver Studio</div>
+
+<script type="module">
+  import Vapi from "https://esm.sh/@vapi-ai/web@2.3.8";
+
+  const PUBLIC_KEY  = "8cf51745-5f59-48bb-8281-a331f4a438d7";
+  const ASSISTANT_ID = "c8445678-43ec-496d-9a60-af58e19b4a58";
+
+  const statusEl   = document.getElementById("status");
+  const btnFalar   = document.getElementById("btnFalar");
+  const btnEncerrar= document.getElementById("btnEncerrar");
+  const dica       = document.getElementById("dica");
+
+  function setStatus(txt, cls=""){ statusEl.textContent = txt; statusEl.className = "status " + cls; }
+  function modoLigado(on){
+    btnFalar.classList.toggle("hidden", on);
+    btnEncerrar.classList.toggle("hidden", !on);
+  }
+
+  let vapi;
+  try {
+    vapi = new Vapi(PUBLIC_KEY);
+  } catch (e) {
+    setStatus("Não consegui iniciar o áudio. Recarregue a página.", "err");
+  }
+
+  if (vapi) {
+    vapi.on("call-start", () => { setStatus("Conectada — pode falar 🎙️", "on"); modoLigado(true); btnEncerrar.disabled=false; });
+    vapi.on("call-end",   () => { setStatus("Conversa encerrada. Toque pra falar de novo.", ""); modoLigado(false); document.body.classList.remove("falando"); btnFalar.disabled=false; });
+    vapi.on("speech-start", () => document.body.classList.add("falando"));   // Íris falando
+    vapi.on("speech-end",   () => document.body.classList.remove("falando"));
+    vapi.on("error", (e) => {
+      console.error("Vapi error:", e);
+      setStatus("Ops, tive um problema na conexão. Tente de novo.", "err");
+      modoLigado(false); btnFalar.disabled=false;
+    });
+
+    btnFalar.addEventListener("click", async () => {
+      btnFalar.disabled = true;
+      setStatus("Conectando… permita o microfone", "");
+      try {
+        await vapi.start(ASSISTANT_ID);
+      } catch (e) {
+        console.error(e);
+        setStatus("Não consegui conectar. Verifique o microfone e tente de novo.", "err");
+        btnFalar.disabled = false;
+      }
+    });
+
+    btnEncerrar.addEventListener("click", () => { btnEncerrar.disabled=true; vapi.stop(); });
+  }
+</script>
+</body>
+</html>
