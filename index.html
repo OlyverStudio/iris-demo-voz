@@ -6,12 +6,13 @@
 <title>Fale com a Íris</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#050506;
+    --bg:#040405; --painel:#0a0a0c;
     --violeta:#8b5cf6; --violeta-claro:#c4b5fd; --indigo:#6366f1; --cyan:#22d3ee;
-    --branco:#f4f4f6; --cinza:#8a8a94; --verde:#4ade80; --vermelho:#fb7185;
+    --branco:#f4f4f6; --cinza:#7c7c86; --verde:#4ade80; --vermelho:#fb7185;
+    --linha:rgba(255,255,255,.09);
     --vol:0; --ease:cubic-bezier(0.32,0.72,0,1);
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -23,77 +24,91 @@
     align-items:center; justify-content:center; text-align:center; padding:24px;
   }
 
-  /* aurora */
-  .aurora{position:fixed;inset:-30%;z-index:0;filter:blur(70px);opacity:.7;pointer-events:none}
-  .aurora span{position:absolute;border-radius:50%;mix-blend-mode:screen}
-  .a1{width:46vw;height:46vw;background:radial-gradient(circle,#6d28d9,transparent 68%);top:6%;left:8%;animation:drift1 18s var(--ease) infinite alternate}
-  .a2{width:40vw;height:40vw;background:radial-gradient(circle,#0e7490,transparent 68%);bottom:4%;right:6%;animation:drift2 22s var(--ease) infinite alternate}
-  .a3{width:34vw;height:34vw;background:radial-gradient(circle,#4338ca,transparent 70%);top:40%;left:44%;animation:drift3 26s var(--ease) infinite alternate}
-  @keyframes drift1{to{transform:translate(14vw,10vh) scale(1.15)}}
-  @keyframes drift2{to{transform:translate(-12vw,-8vh) scale(1.2)}}
-  @keyframes drift3{to{transform:translate(-8vw,10vh) scale(.9)}}
+  /* grade de pontos técnica, some nas bordas */
+  .grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:28px 28px;
+    -webkit-mask:radial-gradient(circle at 50% 45%,#000 26%,transparent 70%);
+            mask:radial-gradient(circle at 50% 45%,#000 26%,transparent 70%)}
+  /* vinheta pra focar no centro */
+  .vinheta{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(circle at 50% 44%,transparent 40%,#020203 84%)}
+  /* grão sutil */
+  .grao{position:fixed;inset:0;z-index:40;pointer-events:none;opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-  .grao{position:fixed;inset:0;z-index:40;pointer-events:none;opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  /* cantos de viewfinder (interface exclusiva) */
+  .frame{position:fixed;inset:18px;z-index:3;pointer-events:none}
+  .frame i{position:absolute;width:16px;height:16px;border:1px solid var(--linha)}
+  .frame .tl{top:0;left:0;border-right:0;border-bottom:0}
+  .frame .tr{top:0;right:0;border-left:0;border-bottom:0}
+  .frame .bl{bottom:0;left:0;border-right:0;border-top:0}
+  .frame .br{bottom:0;right:0;border-left:0;border-top:0}
 
   .conteudo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;
     animation:enter 1s var(--ease) both}
-  @keyframes enter{from{opacity:0;transform:translateY(24px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+  @keyframes enter{from{opacity:0;transform:translateY(20px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
 
-  .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:100px;margin-bottom:22px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);
-    font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#c9c9d2;font-weight:500}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;padding:7px 14px;border-radius:6px;margin-bottom:22px;
+    background:rgba(255,255,255,.03);border:1px solid var(--linha);
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#b7b7c0;font-weight:400}
   .eyebrow .live{width:6px;height:6px;border-radius:50%;background:var(--verde);box-shadow:0 0 10px var(--verde);animation:blink 1.8s ease-in-out infinite}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-  h1{font-size:clamp(30px,8vw,44px);font-weight:600;letter-spacing:-.03em;line-height:1.05;margin-bottom:10px}
-  h1 .grad{background:linear-gradient(100deg,#c4b5fd,#818cf8 40%,#22d3ee 75%,#c4b5fd);background-size:200% auto;
+  h1{font-size:clamp(30px,8vw,46px);font-weight:600;letter-spacing:-.035em;line-height:1.04;margin-bottom:10px}
+  h1 .grad{background:linear-gradient(100deg,#e0e7ff,#818cf8 42%,#22d3ee 78%,#e0e7ff);background-size:200% auto;
     -webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 6s linear infinite}
   @keyframes shimmer{to{background-position:200% center}}
   .sub{color:var(--cinza);font-size:15px;font-weight:400;max-width:380px;margin:0 auto}
 
-  /* ORB — bem maior, centro vazio */
-  .stage{position:relative;width:min(92vw,520px);height:min(92vw,520px);margin:0 auto -10px;display:grid;place-items:center}
+  /* ORB grande, centro vazio, com glow contido só nele */
+  .stage{position:relative;width:min(94vw,540px);height:min(94vw,540px);margin:2px auto -14px;display:grid;place-items:center}
+  .stage::before{content:"";position:absolute;width:70%;height:70%;border-radius:50%;z-index:-1;
+    background:radial-gradient(circle,rgba(34,211,238,.10),rgba(124,58,237,.06) 46%,transparent 66%);
+    filter:blur(26px);
+    transform:scale(calc(1 + var(--vol)*0.4));transition:transform .12s linear;opacity:calc(.6 + var(--vol)*.5)}
   canvas{position:absolute;inset:0;width:100%;height:100%}
 
-  .status{font-size:13.5px;color:var(--cinza);min-height:20px;margin:0 0 22px;font-weight:500;transition:color .3s}
+  .status{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.05em;color:var(--cinza);min-height:18px;margin:0 0 22px;transition:color .3s}
   .status.on{color:var(--verde)} .status.err{color:var(--vermelho)}
 
   .btn{position:relative;border:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:16px;
     padding:12px 12px 12px 26px;border-radius:100px;color:#fff;display:inline-flex;align-items:center;gap:16px;
     transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
   .btn:active{transform:scale(.97)}
-  .btn-falar{background:linear-gradient(140deg,#7c3aed,#4f46e5);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 14px 40px rgba(99,102,241,.45)}
-  .btn-falar:hover{box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 18px 55px rgba(124,58,237,.65)}
+  .btn-falar{background:linear-gradient(140deg,#7c3aed,#4f46e5);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 14px 40px rgba(99,102,241,.4)}
+  .btn-falar:hover{box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 18px 55px rgba(124,58,237,.6)}
   .btn .ico{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:16px;
     transition:transform .5s var(--ease),background .3s}
   .btn-falar:hover .ico{transform:scale(1.08) translateX(1px);background:rgba(255,255,255,.26)}
-  .btn-encerrar{padding:14px 30px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);gap:10px}
-  .btn-encerrar:hover{background:rgba(255,255,255,.09)}
+  .btn-encerrar{padding:14px 30px;background:rgba(255,255,255,.04);border:1px solid var(--linha);gap:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.04em}
+  .btn-encerrar:hover{background:rgba(255,255,255,.08)}
   .btn[disabled]{opacity:.45;cursor:default}
   .hidden{display:none!important}
 
-  .dica{margin-top:20px;font-size:12px;color:#55555e;max-width:320px}
-  .rodape{position:fixed;bottom:16px;left:0;right:0;z-index:2;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#2e2e35}
+  .dica{font-family:'IBM Plex Mono',monospace;margin-top:20px;font-size:11px;letter-spacing:.03em;color:#4a4a53;max-width:340px}
+  .rodape{position:fixed;bottom:15px;left:0;right:0;z-index:3;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#33333b}
 </style>
 </head>
 <body>
-  <div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="grid"></div>
+  <div class="vinheta"></div>
   <div class="grao"></div>
+  <div class="frame"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
 
   <div class="conteudo">
-    <div class="eyebrow"><span class="live"></span> JacSecurity · Assistente de IA</div>
+    <div class="eyebrow"><span class="live"></span> JacSecurity — Assistente de Voz</div>
     <h1>Fale com a <span class="grad">Íris</span></h1>
     <p class="sub">Toque, permita o microfone e converse por voz — como uma ligação de verdade.</p>
 
     <div class="stage"><canvas id="orb"></canvas></div>
 
-    <div class="status" id="status">Pronta pra conversar</div>
+    <div class="status" id="status">// pronta pra conversar</div>
 
     <button class="btn btn-falar" id="btnFalar">Falar com a Íris <span class="ico">🎙️</span></button>
-    <button class="btn btn-encerrar hidden" id="btnEncerrar">◼ Encerrar conversa</button>
+    <button class="btn btn-encerrar hidden" id="btnEncerrar">◼ encerrar</button>
 
-    <p class="dica">Funciona melhor no Chrome ou Safari, com fone de ouvido.</p>
+    <p class="dica">chrome ou safari · use fones de ouvido</p>
   </div>
 
   <div class="rodape">Olyver Studio</div>
@@ -111,17 +126,14 @@
     DPR=Math.min(window.devicePixelRatio||1,2);
     const r=canvas.getBoundingClientRect(); W=r.width; H=r.height;
     canvas.width=W*DPR; canvas.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
-    const N=Math.round(Math.min(W,H)*1.15);       // densidade de bolinhas
+    const N=Math.round(Math.min(W,H)*1.5);
     particles=[];
     for(let i=0;i<N;i++){
       particles.push({
-        a:Math.random()*TAU,
-        band:(Math.random()-0.5),                 // posição na espessura do anel
-        wisp:Math.random()<0.16?Math.random():0,  // algumas disparam pra fora (fios)
-        sz:0.5+Math.random()*1.5,
-        drift:(Math.random()-0.5)*0.0007,
-        tw:Math.random()*TAU,
-        cyan:Math.random()<0.72                    // maioria cyan, resto violeta
+        a:Math.random()*TAU, band:(Math.random()-0.5),
+        wisp:Math.random()<0.16?Math.random():0,
+        sz:0.5+Math.random()*1.5, drift:(Math.random()-0.5)*0.0007,
+        tw:Math.random()*TAU, cyan:Math.random()<0.72
       });
     }
   }
@@ -129,8 +141,6 @@
 
   let targetVol=0, vol=0, ativo=false;
   const root=document.documentElement;
-
-  // campo de ondulação (dá o formato orgânico do anel)
   function field(a,t){
     return Math.sin(a*3+t*0.0011)*0.5 + Math.sin(a*5-t*0.0017)*0.32
          + Math.sin(a*7+t*0.0013)*0.2 + Math.sin(a*2-t*0.0008)*0.4;
@@ -139,13 +149,13 @@
   function loop(t){
     vol+=(targetVol-vol)*0.18; targetVol*=0.9;
     root.style.setProperty("--vol",vol.toFixed(3));
-    const cx=W/2, cy=H/2, R=Math.min(W,H)*0.30, T=R*0.16;
-    const energia = ativo ? (0.05+vol*0.55) : 0.04;
+    const cx=W/2, cy=H/2, R=Math.min(W,H)*0.30, T=R*0.2;
+    const energia = ativo ? (0.05+vol*0.55) : 0.05;
 
     ctx.clearRect(0,0,W,H);
-    ctx.globalCompositeOperation="lighter";       // brilho aditivo (glow), sem retângulo
+    ctx.globalCompositeOperation="lighter";
 
-    // --- ondas (filamentos contínuos) ---
+    // ondas (filamentos)
     for(let k=0;k<3;k++){
       const rk=R*(1+(k-1)*0.055);
       ctx.beginPath();
@@ -155,34 +165,29 @@
         const x=cx+Math.cos(a)*r, y=cy+Math.sin(a)*r;
         i?ctx.lineTo(x,y):ctx.moveTo(x,y);
       }
-      ctx.closePath();
-      ctx.lineWidth=1;
-      ctx.strokeStyle=`rgba(${k===1?"139,92,246":"34,211,238"},${0.08+vol*0.45})`;
-      ctx.shadowColor="rgba(34,211,238,.8)"; ctx.shadowBlur=10;
-      ctx.stroke();
+      ctx.closePath(); ctx.lineWidth=1;
+      ctx.strokeStyle=`rgba(${k===1?"139,92,246":"34,211,238"},${0.13+vol*0.42})`;
+      ctx.shadowColor="rgba(34,211,238,.8)"; ctx.shadowBlur=10; ctx.stroke();
     }
 
-    // --- bolinhas (partículas) ---
+    // bolinhas
     ctx.shadowBlur=0;
     for(const p of particles){
       p.a+=p.drift+0.00007;
       const f=field(p.a,t);
-      const r=R*(1+f*energia)
-             + p.band*T*(1+vol*1.4)
-             + p.wisp*T*2.0*(0.25+vol*1.7);        // fios disparam com a voz
+      const r=R*(1+f*energia) + p.band*T*(1+vol*1.4) + p.wisp*T*2.0*(0.25+vol*1.7);
       const x=cx+Math.cos(p.a)*r, y=cy+Math.sin(p.a)*r;
       const tw=0.55+0.45*Math.sin(t*0.004+p.tw);
-      const alpha=(0.10+vol*0.55)*tw*(1-Math.abs(p.band)*0.55);
+      const alpha=(0.17+vol*0.5)*tw*(1-Math.abs(p.band)*0.5);
       const sz=p.sz*(0.7+vol*1.1);
       ctx.beginPath(); ctx.arc(x,y,sz,0,TAU);
       ctx.fillStyle = p.cyan ? `rgba(103,232,249,${alpha})` : `rgba(167,139,250,${alpha})`;
       ctx.fill();
     }
 
-    // --- núcleo tênue no centro (só um sopro, centro segue vazio) ---
+    // sopro tênue no centro (segue vazio)
     const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,R*0.5);
-    cg.addColorStop(0,`rgba(139,92,246,${0.05+vol*0.12})`);
-    cg.addColorStop(1,"rgba(139,92,246,0)");
+    cg.addColorStop(0,`rgba(99,102,241,${0.05+vol*0.12})`); cg.addColorStop(1,"rgba(99,102,241,0)");
     ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx,cy,R*0.5,0,TAU); ctx.fill();
 
     ctx.globalCompositeOperation="source-over";
@@ -197,15 +202,15 @@
   const setStatus=(t,c="")=>{statusEl.textContent=t; statusEl.className="status "+c};
   const modo=on=>{btnFalar.classList.toggle("hidden",on); btnEncerrar.classList.toggle("hidden",!on)};
   let vapi;
-  try{ vapi=new Vapi(PUBLIC_KEY); }catch(e){ setStatus("Não consegui iniciar o áudio. Recarregue a página.","err"); }
+  try{ vapi=new Vapi(PUBLIC_KEY); }catch(e){ setStatus("// erro ao iniciar — recarregue a página","err"); }
   if(vapi){
-    vapi.on("call-start",()=>{ativo=true; setStatus("Conectada — pode falar","on"); modo(true); btnEncerrar.disabled=false;});
-    vapi.on("call-end",()=>{ativo=false; targetVol=0; setStatus("Conversa encerrada. Toque pra falar de novo."); modo(false); btnFalar.disabled=false;});
+    vapi.on("call-start",()=>{ativo=true; setStatus("// conectada — pode falar","on"); modo(true); btnEncerrar.disabled=false;});
+    vapi.on("call-end",()=>{ativo=false; targetVol=0; setStatus("// conversa encerrada — toque pra falar de novo"); modo(false); btnFalar.disabled=false;});
     vapi.on("volume-level",v=>{ targetVol=Math.max(targetVol,v); });
-    vapi.on("error",e=>{console.error("Vapi error:",e); ativo=false; setStatus("Ops, tive um problema na conexão. Tente de novo.","err"); modo(false); btnFalar.disabled=false;});
+    vapi.on("error",e=>{console.error("Vapi error:",e); ativo=false; setStatus("// falha na conexão — tente de novo","err"); modo(false); btnFalar.disabled=false;});
     btnFalar.addEventListener("click",async()=>{
-      btnFalar.disabled=true; setStatus("Conectando… permita o microfone");
-      try{ await vapi.start(ASSISTANT_ID); }catch(e){ console.error(e); setStatus("Não consegui conectar. Verifique o microfone.","err"); btnFalar.disabled=false; }
+      btnFalar.disabled=true; setStatus("// conectando… permita o microfone");
+      try{ await vapi.start(ASSISTANT_ID); }catch(e){ console.error(e); setStatus("// microfone bloqueado — verifique e tente de novo","err"); btnFalar.disabled=false; }
     });
     btnEncerrar.addEventListener("click",()=>{btnEncerrar.disabled=true; vapi.stop();});
   }
