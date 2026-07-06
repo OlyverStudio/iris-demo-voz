@@ -11,32 +11,28 @@
   :root{
     --bg:#050506;
     --violeta:#8b5cf6; --violeta-claro:#c4b5fd; --indigo:#6366f1; --cyan:#22d3ee;
-    --branco:#f4f4f6; --cinza:#8a8a94;
-    --verde:#4ade80; --vermelho:#fb7185;
-    --vol:0;
-    --ease:cubic-bezier(0.32,0.72,0,1);
+    --branco:#f4f4f6; --cinza:#8a8a94; --verde:#4ade80; --vermelho:#fb7185;
+    --vol:0; --ease:cubic-bezier(0.32,0.72,0,1);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
   body{
     font-family:'Space Grotesk',system-ui,sans-serif;
-    background:var(--bg); color:var(--branco); overflow:hidden;
-    -webkit-font-smoothing:antialiased;
+    background:var(--bg); color:var(--branco); overflow:hidden; -webkit-font-smoothing:antialiased;
     min-height:100dvh; display:flex; flex-direction:column;
     align-items:center; justify-content:center; text-align:center; padding:24px;
   }
 
-  /* ===== FUNDO: aurora em movimento ===== */
-  .aurora{position:fixed;inset:-30%;z-index:0;filter:blur(70px);opacity:.75;pointer-events:none}
+  /* aurora */
+  .aurora{position:fixed;inset:-30%;z-index:0;filter:blur(70px);opacity:.7;pointer-events:none}
   .aurora span{position:absolute;border-radius:50%;mix-blend-mode:screen}
   .a1{width:46vw;height:46vw;background:radial-gradient(circle,#6d28d9,transparent 68%);top:6%;left:8%;animation:drift1 18s var(--ease) infinite alternate}
-  .a2{width:40vw;height:40vw;background:radial-gradient(circle,#4338ca,transparent 68%);bottom:4%;right:6%;animation:drift2 22s var(--ease) infinite alternate}
-  .a3{width:34vw;height:34vw;background:radial-gradient(circle,#0e7490,transparent 70%);top:40%;left:44%;animation:drift3 26s var(--ease) infinite alternate}
+  .a2{width:40vw;height:40vw;background:radial-gradient(circle,#0e7490,transparent 68%);bottom:4%;right:6%;animation:drift2 22s var(--ease) infinite alternate}
+  .a3{width:34vw;height:34vw;background:radial-gradient(circle,#4338ca,transparent 70%);top:40%;left:44%;animation:drift3 26s var(--ease) infinite alternate}
   @keyframes drift1{to{transform:translate(14vw,10vh) scale(1.15)}}
   @keyframes drift2{to{transform:translate(-12vw,-8vh) scale(1.2)}}
   @keyframes drift3{to{transform:translate(-8vw,10vh) scale(.9)}}
 
-  /* grão de filme */
   .grao{position:fixed;inset:0;z-index:40;pointer-events:none;opacity:.05;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
@@ -44,54 +40,32 @@
     animation:enter 1s var(--ease) both}
   @keyframes enter{from{opacity:0;transform:translateY(24px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
 
-  /* eyebrow pill */
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:7px 15px;border-radius:100px;margin-bottom:26px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-    backdrop-filter:blur(12px);
-    font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#c9c9d2;font-weight:500;
-  }
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:100px;margin-bottom:22px;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);
+    font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#c9c9d2;font-weight:500}
   .eyebrow .live{width:6px;height:6px;border-radius:50%;background:var(--verde);box-shadow:0 0 10px var(--verde);animation:blink 1.8s ease-in-out infinite}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 
-  h1{font-size:clamp(30px,8vw,44px);font-weight:600;letter-spacing:-.03em;line-height:1.05;margin-bottom:12px}
-  h1 .grad{
-    background:linear-gradient(100deg,#c4b5fd,#818cf8 40%,#22d3ee 75%,#c4b5fd);
-    background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
-    animation:shimmer 6s linear infinite;
-  }
+  h1{font-size:clamp(30px,8vw,44px);font-weight:600;letter-spacing:-.03em;line-height:1.05;margin-bottom:10px}
+  h1 .grad{background:linear-gradient(100deg,#c4b5fd,#818cf8 40%,#22d3ee 75%,#c4b5fd);background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 6s linear infinite}
   @keyframes shimmer{to{background-position:200% center}}
   .sub{color:var(--cinza);font-size:15px;font-weight:400;max-width:380px;margin:0 auto}
 
-  /* ===== ORB ===== */
-  .stage{position:relative;width:min(80vw,360px);height:min(80vw,360px);margin:18px auto 6px;display:grid;place-items:center}
-  .ring,.ring2{position:absolute;border-radius:50%;inset:0;
-    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));
-            mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));
-    transform:scale(calc(1 + var(--vol)*0.14));transition:transform .12s linear}
-  .ring{background:conic-gradient(from 0deg,transparent,var(--violeta),var(--indigo),var(--cyan),transparent 55%,var(--violeta) 78%,transparent);animation:spin 8s linear infinite;opacity:.85}
-  .ring2{inset:9%;background:conic-gradient(from 180deg,transparent,var(--cyan),transparent 40%,var(--violeta-claro),transparent);animation:spin 12s linear infinite reverse;opacity:.5;
-    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),#000 calc(100% - 1.5px));
-            mask:radial-gradient(farthest-side,transparent calc(100% - 1.5px),#000 calc(100% - 1.5px))}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  canvas{position:absolute;width:86%;height:86%}
+  /* ORB — bem maior, centro vazio */
+  .stage{position:relative;width:min(92vw,520px);height:min(92vw,520px);margin:0 auto -10px;display:grid;place-items:center}
+  canvas{position:absolute;inset:0;width:100%;height:100%}
 
-  .status{font-size:13.5px;color:var(--cinza);min-height:20px;margin:4px 0 24px;font-weight:500;letter-spacing:.01em;transition:color .3s}
-  .status.on{color:var(--verde)}
-  .status.err{color:var(--vermelho)}
+  .status{font-size:13.5px;color:var(--cinza);min-height:20px;margin:0 0 22px;font-weight:500;transition:color .3s}
+  .status.on{color:var(--verde)} .status.err{color:var(--vermelho)}
 
-  /* ===== CTA button-in-button ===== */
   .btn{position:relative;border:none;cursor:pointer;font-family:inherit;font-weight:600;font-size:16px;
-    padding:12px 12px 12px 26px;border-radius:100px;color:#fff;
-    display:inline-flex;align-items:center;gap:16px;
-    transition:transform .5s var(--ease),box-shadow .5s var(--ease);}
+    padding:12px 12px 12px 26px;border-radius:100px;color:#fff;display:inline-flex;align-items:center;gap:16px;
+    transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
   .btn:active{transform:scale(.97)}
-  .btn-falar{background:linear-gradient(140deg,#7c3aed,#4f46e5);
-    box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 14px 40px rgba(99,102,241,.45)}
+  .btn-falar{background:linear-gradient(140deg,#7c3aed,#4f46e5);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 14px 40px rgba(99,102,241,.45)}
   .btn-falar:hover{box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 18px 55px rgba(124,58,237,.65)}
-  .btn .ico{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.16);
-    display:grid;place-items:center;font-size:16px;
+  .btn .ico{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:16px;
     transition:transform .5s var(--ease),background .3s}
   .btn-falar:hover .ico{transform:scale(1.08) translateX(1px);background:rgba(255,255,255,.26)}
   .btn-encerrar{padding:14px 30px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);gap:10px}
@@ -99,7 +73,7 @@
   .btn[disabled]{opacity:.45;cursor:default}
   .hidden{display:none!important}
 
-  .dica{margin-top:22px;font-size:12px;color:#55555e;max-width:320px;letter-spacing:.02em}
+  .dica{margin-top:20px;font-size:12px;color:#55555e;max-width:320px}
   .rodape{position:fixed;bottom:16px;left:0;right:0;z-index:2;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#2e2e35}
 </style>
 </head>
@@ -112,11 +86,7 @@
     <h1>Fale com a <span class="grad">Íris</span></h1>
     <p class="sub">Toque, permita o microfone e converse por voz — como uma ligação de verdade.</p>
 
-    <div class="stage">
-      <div class="ring"></div>
-      <div class="ring2"></div>
-      <canvas id="orb"></canvas>
-    </div>
+    <div class="stage"><canvas id="orb"></canvas></div>
 
     <div class="status" id="status">Pronta pra conversar</div>
 
@@ -130,63 +100,95 @@
 
 <script type="module">
   import Vapi from "https://esm.sh/@vapi-ai/web@2.3.8";
+  const PUBLIC_KEY="8cf51745-5f59-48bb-8281-a331f4a438d7";
+  const ASSISTANT_ID="c8445678-43ec-496d-9a60-af58e19b4a58";
+  const TAU=Math.PI*2;
 
-  const PUBLIC_KEY   = "8cf51745-5f59-48bb-8281-a331f4a438d7";
-  const ASSISTANT_ID = "c8445678-43ec-496d-9a60-af58e19b4a58";
-
-  /* ===== ORB audio-reativo ===== */
+  /* ===== ORB: anel de partículas + ondas (centro vazio, audio-reativo) ===== */
   const canvas=document.getElementById("orb"), ctx=canvas.getContext("2d");
-  let W=0,H=0,DPR=1;
-  function resize(){
+  let W=0,H=0,DPR=1,particles=[];
+  function build(){
     DPR=Math.min(window.devicePixelRatio||1,2);
     const r=canvas.getBoundingClientRect(); W=r.width; H=r.height;
     canvas.width=W*DPR; canvas.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+    const N=Math.round(Math.min(W,H)*1.15);       // densidade de bolinhas
+    particles=[];
+    for(let i=0;i<N;i++){
+      particles.push({
+        a:Math.random()*TAU,
+        band:(Math.random()-0.5),                 // posição na espessura do anel
+        wisp:Math.random()<0.16?Math.random():0,  // algumas disparam pra fora (fios)
+        sz:0.5+Math.random()*1.5,
+        drift:(Math.random()-0.5)*0.0007,
+        tw:Math.random()*TAU,
+        cyan:Math.random()<0.72                    // maioria cyan, resto violeta
+      });
+    }
   }
-  addEventListener("resize",resize);
+  addEventListener("resize",build);
 
   let targetVol=0, vol=0, ativo=false;
   const root=document.documentElement;
 
+  // campo de ondulação (dá o formato orgânico do anel)
+  function field(a,t){
+    return Math.sin(a*3+t*0.0011)*0.5 + Math.sin(a*5-t*0.0017)*0.32
+         + Math.sin(a*7+t*0.0013)*0.2 + Math.sin(a*2-t*0.0008)*0.4;
+  }
+
   function loop(t){
-    vol += (targetVol-vol)*0.18; targetVol*=0.9;
-    root.style.setProperty("--vol", vol.toFixed(3));
-    const cx=W/2, cy=H/2, base=Math.min(W,H)*0.30;
-    const energia = ativo ? (0.09+vol*2.6) : 0.045;
-    const inflar  = ativo ? vol*0.42 : 0;
+    vol+=(targetVol-vol)*0.18; targetVol*=0.9;
+    root.style.setProperty("--vol",vol.toFixed(3));
+    const cx=W/2, cy=H/2, R=Math.min(W,H)*0.30, T=R*0.16;
+    const energia = ativo ? (0.05+vol*0.55) : 0.04;
+
     ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation="lighter";       // brilho aditivo (glow), sem retângulo
 
-    // halo
-    const gR=base*(1.1+inflar*1.2+Math.sin(t*0.002)*0.03);
-    const g=ctx.createRadialGradient(cx,cy,base*0.25,cx,cy,gR*2);
-    g.addColorStop(0,`rgba(124,58,237,${0.30+vol*0.4})`);
-    g.addColorStop(.5,`rgba(79,70,229,${0.12+vol*0.2})`);
-    g.addColorStop(1,"rgba(34,211,238,0)");
-    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,gR*2,0,6.2832); ctx.fill();
-
-    function blob(radMul,harmMul,rot,fill,blur,alpha){
-      const N=150; ctx.beginPath();
-      for(let i=0;i<=N;i++){
-        const a=(i/N)*6.2832;
-        const nz=Math.sin(a*3+t*0.0013+rot)*0.5+Math.sin(a*5-t*0.0019+rot)*0.3+Math.sin(a*7+t*0.0011)*0.16;
-        const r=base*radMul*(1+inflar+nz*energia*harmMul+Math.sin(t*0.0022)*0.02);
+    // --- ondas (filamentos contínuos) ---
+    for(let k=0;k<3;k++){
+      const rk=R*(1+(k-1)*0.055);
+      ctx.beginPath();
+      for(let i=0;i<=160;i++){
+        const a=(i/160)*TAU;
+        const r=rk*(1+field(a,t+k*260)*energia);
         const x=cx+Math.cos(a)*r, y=cy+Math.sin(a)*r;
         i?ctx.lineTo(x,y):ctx.moveTo(x,y);
       }
-      ctx.closePath(); ctx.save();
-      ctx.shadowColor="rgba(124,58,237,.9)"; ctx.shadowBlur=blur;
-      ctx.globalAlpha=alpha; ctx.fillStyle=fill; ctx.fill(); ctx.restore();
+      ctx.closePath();
+      ctx.lineWidth=1;
+      ctx.strokeStyle=`rgba(${k===1?"139,92,246":"34,211,238"},${0.08+vol*0.45})`;
+      ctx.shadowColor="rgba(34,211,238,.8)"; ctx.shadowBlur=10;
+      ctx.stroke();
     }
-    blob(1.0,0.9,2.1,"rgba(129,140,248,.32)",28+vol*40,0.9);
-    const core=ctx.createRadialGradient(cx-base*0.24,cy-base*0.28,base*0.12,cx,cy,base*1.05);
-    core.addColorStop(0,"#e0e7ff"); core.addColorStop(.34,"#8b5cf6"); core.addColorStop(1,"#4c1d95");
-    blob(0.82,1.0,0,core,24+vol*30,1);
-    const spec=ctx.createRadialGradient(cx-base*0.26,cy-base*0.32,0,cx-base*0.26,cy-base*0.32,base*0.55);
-    spec.addColorStop(0,"rgba(255,255,255,.6)"); spec.addColorStop(1,"rgba(255,255,255,0)");
-    ctx.fillStyle=spec; ctx.beginPath(); ctx.arc(cx-base*0.22,cy-base*0.28,base*0.5,0,6.2832); ctx.fill();
 
+    // --- bolinhas (partículas) ---
+    ctx.shadowBlur=0;
+    for(const p of particles){
+      p.a+=p.drift+0.00007;
+      const f=field(p.a,t);
+      const r=R*(1+f*energia)
+             + p.band*T*(1+vol*1.4)
+             + p.wisp*T*2.0*(0.25+vol*1.7);        // fios disparam com a voz
+      const x=cx+Math.cos(p.a)*r, y=cy+Math.sin(p.a)*r;
+      const tw=0.55+0.45*Math.sin(t*0.004+p.tw);
+      const alpha=(0.10+vol*0.55)*tw*(1-Math.abs(p.band)*0.55);
+      const sz=p.sz*(0.7+vol*1.1);
+      ctx.beginPath(); ctx.arc(x,y,sz,0,TAU);
+      ctx.fillStyle = p.cyan ? `rgba(103,232,249,${alpha})` : `rgba(167,139,250,${alpha})`;
+      ctx.fill();
+    }
+
+    // --- núcleo tênue no centro (só um sopro, centro segue vazio) ---
+    const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,R*0.5);
+    cg.addColorStop(0,`rgba(139,92,246,${0.05+vol*0.12})`);
+    cg.addColorStop(1,"rgba(139,92,246,0)");
+    ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx,cy,R*0.5,0,TAU); ctx.fill();
+
+    ctx.globalCompositeOperation="source-over";
     requestAnimationFrame(loop);
   }
-  resize(); requestAnimationFrame(loop);
+  build(); requestAnimationFrame(loop);
 
   /* ===== VAPI ===== */
   const statusEl=document.getElementById("status");
@@ -194,11 +196,8 @@
   const btnEncerrar=document.getElementById("btnEncerrar");
   const setStatus=(t,c="")=>{statusEl.textContent=t; statusEl.className="status "+c};
   const modo=on=>{btnFalar.classList.toggle("hidden",on); btnEncerrar.classList.toggle("hidden",!on)};
-
   let vapi;
-  try{ vapi=new Vapi(PUBLIC_KEY); }
-  catch(e){ setStatus("Não consegui iniciar o áudio. Recarregue a página.","err"); }
-
+  try{ vapi=new Vapi(PUBLIC_KEY); }catch(e){ setStatus("Não consegui iniciar o áudio. Recarregue a página.","err"); }
   if(vapi){
     vapi.on("call-start",()=>{ativo=true; setStatus("Conectada — pode falar","on"); modo(true); btnEncerrar.disabled=false;});
     vapi.on("call-end",()=>{ativo=false; targetVol=0; setStatus("Conversa encerrada. Toque pra falar de novo."); modo(false); btnFalar.disabled=false;});
@@ -206,8 +205,7 @@
     vapi.on("error",e=>{console.error("Vapi error:",e); ativo=false; setStatus("Ops, tive um problema na conexão. Tente de novo.","err"); modo(false); btnFalar.disabled=false;});
     btnFalar.addEventListener("click",async()=>{
       btnFalar.disabled=true; setStatus("Conectando… permita o microfone");
-      try{ await vapi.start(ASSISTANT_ID); }
-      catch(e){ console.error(e); setStatus("Não consegui conectar. Verifique o microfone.","err"); btnFalar.disabled=false; }
+      try{ await vapi.start(ASSISTANT_ID); }catch(e){ console.error(e); setStatus("Não consegui conectar. Verifique o microfone.","err"); btnFalar.disabled=false; }
     });
     btnEncerrar.addEventListener("click",()=>{btnEncerrar.disabled=true; vapi.stop();});
   }
