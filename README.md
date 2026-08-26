@@ -22,6 +22,7 @@ Esta página é a prova, e leva menos de dez segundos para ser experimentada.
 ## Relacionado
 
 - [iris-jacsecurity](https://github.com/OlyverStudio/iris-jacsecurity) — o agente em si: Node.js, WhatsApp, prompts e deploy *(privado)*
+- [agente-ia-whatsapp](https://github.com/GuilhermeOliveira337/agente-ia-whatsapp) — **versão pública e anonimizada** do agente, com o código aberto *(público)*
 
 ## Rodando localmente
 
